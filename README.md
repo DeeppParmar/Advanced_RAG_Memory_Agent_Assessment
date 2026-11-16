@@ -1,5 +1,5 @@
 # Advanced RAG Memory Agent
-- **Repository**: [Insert URL]
+- **Repository**: https://github.com/DeeppParmar/Advanced_RAG_Memory_Agent_Assessment
 
 Production-grade Advanced Retrieval-Augmented Generation (RAG) agent featuring dense-sparse hybrid search, parent-document retrieval mapping, Cohere ReRank context compression, long-term semantic memory (Mem0 pattern), and multi-phase execution latency telemetry.
 
