@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     """Application configuration loaded from environment or .env file."""
     openai_api_key: Optional[str] = None
     cohere_api_key: Optional[str] = None
+    gemini_api_key: Optional[str] = None
+    gemini_model: str = "gemini-3.1-flash-lite"
 
     qdrant_url: str = ":memory:"
     qdrant_api_key: Optional[str] = None

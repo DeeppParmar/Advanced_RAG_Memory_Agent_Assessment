@@ -170,6 +170,32 @@ class RAGAgent:
         Generates response adhering strictly to persistent user persona adaptations
         and retrieved context.
         """
+        # Check if Google Gemini API key is configured
+        if settings.gemini_api_key and not settings.gemini_api_key.startswith("your_"):
+            try:
+                from google import genai
+                gemini_client = genai.Client(
+                    api_key=settings.gemini_api_key,
+                    http_options={"timeout": 15000}
+                )
+                context_str = "\n\n".join(f"Document Context:\n{d.page_content}" for d in context_docs)
+                gemini_prompt = (
+                    f"{persona_prompt}\n\n"
+                    f"RETRIEVED KNOWLEDGE CONTEXT:\n{context_str}\n\n"
+                    f"USER QUERY: {query}\n\n"
+                    f"RESPONSE INSTRUCTIONS: Answer accurately using the retrieved context. "
+                    f"Strictly adhere to the user's stored persona, coding preferences, and brevity rules above. "
+                    f"If the user requested code-only, return ONLY the raw code block with no explanations."
+                )
+                gemini_res = gemini_client.models.generate_content(
+                    model=settings.gemini_model,
+                    contents=gemini_prompt
+                )
+                if gemini_res and gemini_res.text:
+                    return gemini_res.text.strip()
+            except Exception as e:
+                pass
+
         # Check if OpenAI API key is configured and valid
         if settings.openai_api_key and settings.openai_api_key.startswith("sk-"):
             try:
