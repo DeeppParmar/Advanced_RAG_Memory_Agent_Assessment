@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from app.agent import rag_agent
 from app.memory import memory_manager
 from app.config import settings
-from app.ui import HTML_DASHBOARD
+from app.ui import get_html_dashboard, HTML_DASHBOARD
 
 app = FastAPI(
     title="Advanced RAG Agent with Context Compression & Semantic Memory",
@@ -58,8 +58,8 @@ class UserMemoriesResponse(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 def root_dashboard():
-    """Serves the interactive visual testing dashboard for real-time validation."""
-    return HTMLResponse(content=HTML_DASHBOARD)
+    """Serves the user-friendly visual testing dashboard."""
+    return HTMLResponse(content=get_html_dashboard())
 
 
 @app.get("/api/status")
