@@ -8,7 +8,7 @@ if not exist .env (
 )
 
 echo ========================================================
-echo  Advanced RAG Agent with Context Compression and Memory
+echo  Smart RAG Assistant
 echo ========================================================
 echo.
 echo [1] Start Server and Open Web UI  (Default - Just press ENTER)
@@ -27,11 +27,12 @@ if "%choice%"=="2" goto run_tests
 echo.
 echo ========================================================
 echo  FastAPI Server Starting...
-echo  - Interactive UI: http://localhost:8000/
-echo  - Swagger Docs:   http://localhost:8000/docs
+echo  - Web Interface: http://localhost:8000/
+echo  - API Swagger:   http://localhost:8000/docs
 echo ========================================================
 echo.
-echo Automatically opening UI in your default browser...
+echo NOTE: Please KEEP THIS WINDOW OPEN while using the web app!
+echo Opening UI in your default browser...
 start "" cmd /c "timeout /t 2 /nobreak >nul && start http://localhost:8000/"
 python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 goto end
