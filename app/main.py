@@ -25,9 +25,9 @@ app.add_middleware(
 
 
 class ChatRequest(BaseModel):
-    query: str = Field(..., description="User question or prompt", example="Write a quick merge sort routine.")
-    user_id: str = Field(..., description="Unique user identifier", example="usr_99")
-    session_id: str = Field(..., description="Chat session identifier", example="sess_1234")
+    query: str = Field(..., description="User question or prompt", json_schema_extra={"example": "Write a quick merge sort routine."})
+    user_id: str = Field(..., description="Unique user identifier", json_schema_extra={"example": "usr_99"})
+    session_id: str = Field(..., description="Chat session identifier", json_schema_extra={"example": "sess_1234"})
 
 
 class Telemetry(BaseModel):
