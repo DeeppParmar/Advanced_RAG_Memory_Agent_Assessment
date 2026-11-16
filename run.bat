@@ -10,23 +10,28 @@ if not exist .env (
 echo ========================================================
 echo  Advanced RAG Agent with Context Compression and Memory
 echo ========================================================
+echo.
+echo [1] Start Server and Open Web UI  (Default - Just press ENTER)
+echo [2] Run Pytest Automated Tests   (Type 2 and press ENTER)
+echo.
 
 if "%1"=="test" goto run_tests
 if "%1"=="server" goto run_server
 
-echo [1] Start FastAPI Server and Open Web Dashboard
-echo [2] Run Pytest Automated Verification Suite
-set /p choice="Choose [1/2] (Default: 1): "
+set choice=1
+set /p choice="Enter option [1 or 2, default is 1]: "
 
 if "%choice%"=="2" goto run_tests
 
 :run_server
 echo.
-echo Launching FastAPI server...
-echo - Interactive Dashboard: http://localhost:8000/
-echo - Swagger API Docs:      http://localhost:8000/docs
+echo ========================================================
+echo  FastAPI Server Starting...
+echo  - Interactive UI: http://localhost:8000/
+echo  - Swagger Docs:   http://localhost:8000/docs
+echo ========================================================
 echo.
-echo Opening dashboard in your default browser...
+echo Automatically opening UI in your default browser...
 start "" cmd /c "timeout /t 2 /nobreak >nul && start http://localhost:8000/"
 python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 goto end

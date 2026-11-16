@@ -1,314 +1,308 @@
-"""Interactive Visual Testing Dashboard for the Advanced RAG Agent."""
+"""Ultra-minimal, clean visual testing UI with pre-filled examples."""
 
 HTML_DASHBOARD = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advanced RAG Agent | Interactive Dashboard</title>
+  <title>RAG Agent - Minimal UI</title>
   <style>
-    :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --primary: #38bdf8;
-      --primary-hover: #0284c7;
-      --accent: #10b981;
-      --code-bg: #090d16;
-    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      padding: 24px;
-      line-height: 1.5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 32px 16px;
+      display: flex;
+      justify-content: center;
     }
-    .container { max-width: 1100px; margin: 0 auto; }
+    .app {
+      width: 100%;
+      max-width: 860px;
+    }
     header {
+      margin-bottom: 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--card-border);
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 12px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 16px;
     }
-    h1 { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      font-size: 0.75rem;
-      border-radius: 9999px;
-      background: #0369a1;
-      color: #e0f2fe;
-      font-weight: 600;
-    }
-    .nav-links a {
-      color: var(--primary);
+    h1 { font-size: 1.25rem; font-weight: 600; color: #38bdf8; }
+    .links a {
+      color: #94a3b8;
       text-decoration: none;
-      margin-left: 14px;
-      font-size: 0.9rem;
-      border: 1px solid var(--card-border);
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: background 0.2s;
+      font-size: 0.85rem;
+      margin-left: 12px;
+      padding: 4px 8px;
+      border: 1px solid #334155;
+      border-radius: 4px;
     }
-    .nav-links a:hover { background: var(--card-bg); }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 24px;
-    }
-    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
+    .links a:hover { color: #38bdf8; border-color: #38bdf8; }
+    
+    .panel {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
       padding: 20px;
+      margin-bottom: 20px;
     }
-    .card-title {
-      font-size: 1.1rem;
+    .panel-title {
+      font-size: 0.95rem;
       font-weight: 600;
+      color: #cbd5e1;
       margin-bottom: 12px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    p.desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
-    .btn {
-      background: var(--primary);
-      color: #0f172a;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s;
+    
+    .examples-bar {
+      margin-bottom: 16px;
+    }
+    .example-tag {
       display: inline-block;
-      margin-bottom: 8px;
-      margin-right: 8px;
+      background: #090d16;
+      border: 1px solid #334155;
+      color: #38bdf8;
+      font-size: 0.78rem;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin: 0 6px 6px 0;
+      transition: all 0.15s ease;
     }
-    .btn:hover { background: var(--primary-hover); color: white; }
-    .btn-secondary { background: #334155; color: white; }
+    .example-tag:hover {
+      background: #38bdf8;
+      color: #0f172a;
+      border-color: #38bdf8;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .field { flex: 1; }
+    label {
+      display: block;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    input, textarea {
+      width: 100%;
+      background: #090d16;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: #f8fafc;
+      font-size: 0.9rem;
+      outline: none;
+      font-family: inherit;
+    }
+    input:focus, textarea:focus { border-color: #38bdf8; }
+    
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn {
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn-secondary {
+      background: #334155;
+      color: #f1f5f9;
+    }
     .btn-secondary:hover { background: #475569; }
-    .telemetry-bar {
+
+    .telemetry {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
       margin: 16px 0;
     }
-    .metric-card {
-      background: var(--code-bg);
-      padding: 12px;
+    .telemetry-item {
+      background: #090d16;
+      border: 1px solid #334155;
       border-radius: 6px;
-      border: 1px solid var(--card-border);
+      padding: 10px;
       text-align: center;
     }
-    .metric-val { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
-    .metric-lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
-    pre {
-      background: var(--code-bg);
-      color: #e2e8f0;
-      padding: 14px;
-      border-radius: 6px;
-      overflow-x: auto;
-      font-size: 0.85rem;
-      border: 1px solid var(--card-border);
-      white-space: pre-wrap;
-      max-height: 340px;
-      overflow-y: auto;
+    .telemetry-val {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #34d399;
     }
-    .input-group { margin-bottom: 12px; }
-    label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
-    input, textarea {
-      width: 100%;
-      background: var(--code-bg);
-      border: 1px solid var(--card-border);
-      padding: 8px 12px;
-      color: white;
+    .telemetry-lbl {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    pre {
+      background: #090d16;
+      border: 1px solid #334155;
       border-radius: 6px;
-      font-size: 0.9rem;
+      padding: 14px;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 400px;
+      overflow-y: auto;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="app">
     <header>
-      <div>
-        <h1>Advanced RAG Agent Dashboard</h1>
-        <span class="badge">Hybrid Search (Dense+Sparse)</span>
-        <span class="badge">Cohere ReRank</span>
-        <span class="badge">Mem0 Semantic Memory</span>
-      </div>
-      <div class="nav-links">
-        <a href="/docs" target="_blank">Swagger UI (/docs)</a>
-        <a href="/health" target="_blank">Health Check (/health)</a>
+      <h1>Advanced RAG Agent</h1>
+      <div class="links">
+        <a href="/docs" target="_blank">Swagger API</a>
+        <a href="/health" target="_blank">Health</a>
       </div>
     </header>
 
-    <div class="grid">
-      <!-- Test Case 1 Card -->
-      <div class="card">
-        <div class="card-title">Test Case 1: Latency & Telemetry</div>
-        <p class="desc">Executes hybrid dense-sparse search, Cohere ReRank compression, and asserts positive execution latency telemetry.</p>
-        <button class="btn" onclick="runTestCase1()">Run Latency Test</button>
-        <div class="telemetry-bar">
-          <div class="metric-card"><div class="metric-val" id="tc1-retrieval">-</div><div class="metric-lbl">Retrieval ms</div></div>
-          <div class="metric-card"><div class="metric-val" id="tc1-rerank">-</div><div class="metric-lbl">ReRank ms</div></div>
-          <div class="metric-card"><div class="metric-val" id="tc1-gen">-</div><div class="metric-lbl">Generation ms</div></div>
-          <div class="metric-card"><div class="metric-val" id="tc1-total">-</div><div class="metric-lbl">Total ms</div></div>
-        </div>
-        <pre id="tc1-output">// Output will appear here...</pre>
+    <div class="panel">
+      <div class="panel-title">Click An Example to Auto-Fill</div>
+      <div class="examples-bar">
+        <span class="example-tag" onclick="fillExample(1)">Ex 1: Latency Benchmark (Merge Sort)</span>
+        <span class="example-tag" onclick="fillExample(2)">Ex 2: Set Persona (usr_99 Python brief)</span>
+        <span class="example-tag" onclick="fillExample(3)">Ex 3: Persona Adapted Query (Merge Sort)</span>
+        <span class="example-tag" onclick="fillExample(4)">Ex 4: Advanced RAG Architecture</span>
       </div>
 
-      <!-- Test Case 2 Card -->
-      <div class="card">
-        <div class="card-title">Test Case 2: Multi-Session Memory Adaptation</div>
-        <p class="desc">Tests long-term user fact extraction (Python + brief code-only) and cross-session persona response adaptation.</p>
-        <div>
-          <button class="btn" onclick="runTC2Step1()">1. Set Persona (usr_99)</button>
-          <button class="btn btn-secondary" onclick="runTC2Step2()">2. View Memories</button>
-          <button class="btn" onclick="runTC2Step3()">3. Query Merge Sort (New Session)</button>
+      <div class="form-row">
+        <div class="field">
+          <label>User ID</label>
+          <input type="text" id="userId" value="usr_99" placeholder="e.g. usr_99">
         </div>
-        <pre id="tc2-output">// Follow the 3 steps above to test multi-session memory adaptation...</pre>
+        <div class="field">
+          <label>Session ID</label>
+          <input type="text" id="sessionId" value="session_01" placeholder="e.g. session_01">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Query / Prompt</label>
+        <textarea id="queryText" rows="3" placeholder="Enter your query here...">Explain how merge sort works and its divide-and-conquer strategy.</textarea>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn" onclick="sendChat()">Send Query (/api/chat)</button>
+        <button class="btn btn-secondary" onclick="checkMemories()">View Stored Memories</button>
       </div>
     </div>
 
-    <!-- Interactive Chat Sandbox -->
-    <div class="card">
-      <div class="card-title">Interactive Custom Chat Sandbox</div>
-      <p class="desc">Test any custom prompt against the RAG retrieval pipeline and memory engine.</p>
-      <div style="display: flex; gap: 12px; margin-bottom: 12px;">
-        <div class="input-group" style="flex: 1;">
-          <label>User ID</label>
-          <input type="text" id="custom-user" value="usr_test">
+    <div class="panel">
+      <div class="panel-title">Execution Latency Telemetry</div>
+      <div class="telemetry">
+        <div class="telemetry-item">
+          <div class="telemetry-val" id="valRetrieval">-</div>
+          <div class="telemetry-lbl">Retrieval ms</div>
         </div>
-        <div class="input-group" style="flex: 1;">
-          <label>Session ID</label>
-          <input type="text" id="custom-session" value="sess_web_ui">
+        <div class="telemetry-item">
+          <div class="telemetry-val" id="valRerank">-</div>
+          <div class="telemetry-lbl">ReRank ms</div>
+        </div>
+        <div class="telemetry-item">
+          <div class="telemetry-val" id="valGen">-</div>
+          <div class="telemetry-lbl">Generation ms</div>
+        </div>
+        <div class="telemetry-item">
+          <div class="telemetry-val" id="valTotal">-</div>
+          <div class="telemetry-lbl">Total ms</div>
         </div>
       </div>
-      <div class="input-group">
-        <label>Query / Prompt</label>
-        <textarea id="custom-query" rows="2">Write a quick merge sort routine.</textarea>
-      </div>
-      <button class="btn" onclick="runCustomChat()">Send to /api/chat</button>
-      
-      <div class="telemetry-bar">
-        <div class="metric-card"><div class="metric-val" id="custom-retrieval">-</div><div class="metric-lbl">Retrieval ms</div></div>
-        <div class="metric-card"><div class="metric-val" id="custom-rerank">-</div><div class="metric-lbl">ReRank ms</div></div>
-        <div class="metric-card"><div class="metric-val" id="custom-gen">-</div><div class="metric-lbl">Generation ms</div></div>
-        <div class="metric-card"><div class="metric-val" id="custom-total">-</div><div class="metric-lbl">Total ms</div></div>
-      </div>
-      <pre id="custom-output">// API response output...</pre>
+
+      <div class="panel-title" style="margin-top: 16px;">Response Output</div>
+      <pre id="outputView">// Click an example above and click "Send Query" to see output...</pre>
     </div>
   </div>
 
   <script>
-    async function runTestCase1() {
-      const out = document.getElementById("tc1-output");
-      out.textContent = "Processing hybrid retrieval and Cohere ReRank compression...";
+    const examples = {
+      1: {
+        user: "usr_latency",
+        session: "sess_01",
+        query: "Explain how merge sort works and its divide-and-conquer strategy."
+      },
+      2: {
+        user: "usr_99",
+        session: "sess_init",
+        query: "Hello! I work in Python and prefer brief, code-only responses."
+      },
+      3: {
+        user: "usr_99",
+        session: "sess_new_tab",
+        query: "Write a quick merge sort routine."
+      },
+      4: {
+        user: "usr_architect",
+        session: "sess_rag",
+        query: "How does Parent-Document retrieval differ from standard RAG?"
+      }
+    };
+
+    function fillExample(id) {
+      const ex = examples[id];
+      document.getElementById("userId").value = ex.user;
+      document.getElementById("sessionId").value = ex.session;
+      document.getElementById("queryText").value = ex.query;
+    }
+
+    async function sendChat() {
+      const out = document.getElementById("outputView");
+      out.textContent = "Processing hybrid retrieval, Cohere ReRank, and response generation...";
+
+      const user_id = document.getElementById("userId").value;
+      const session_id = document.getElementById("sessionId").value;
+      const query = document.getElementById("queryText").value;
+
       try {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            query: "Explain how merge sort works and its divide-and-conquer strategy.",
-            user_id: "usr_latency_test",
-            session_id: "sess_latency_01"
-          })
+          body: JSON.stringify({ query, user_id, session_id })
         });
         const data = await res.json();
-        document.getElementById("tc1-retrieval").textContent = data.telemetry.retrieval_latency_ms;
-        document.getElementById("tc1-rerank").textContent = data.telemetry.rerank_latency_ms;
-        document.getElementById("tc1-gen").textContent = data.telemetry.generation_latency_ms;
-        document.getElementById("tc1-total").textContent = data.telemetry.total_latency_ms;
-        out.textContent = JSON.stringify(data, null, 2);
-      } catch (e) {
-        out.textContent = "Error: " + e.message;
+
+        if (data.telemetry) {
+          document.getElementById("valRetrieval").textContent = data.telemetry.retrieval_latency_ms;
+          document.getElementById("valRerank").textContent = data.telemetry.rerank_latency_ms;
+          document.getElementById("valGen").textContent = data.telemetry.generation_latency_ms;
+          document.getElementById("valTotal").textContent = data.telemetry.total_latency_ms;
+        }
+
+        out.textContent = data.response + "\\n\\n--- FULL TELEMETRY & CONTEXT ---\\n" + JSON.stringify(data, null, 2);
+      } catch (err) {
+        out.textContent = "Error: " + err.message;
       }
     }
 
-    async function runTC2Step1() {
-      const out = document.getElementById("tc2-output");
-      out.textContent = "Sending preference registration query for usr_99...";
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            query: "Hello! I work in Python and prefer brief, code-only responses.",
-            user_id: "usr_99",
-            session_id: "sess_init_99"
-          })
-        });
-        const data = await res.json();
-        out.textContent = "Step 1 Completed! Response from agent:\n" + data.response;
-      } catch (e) {
-        out.textContent = "Error: " + e.message;
-      }
-    }
+    async function checkMemories() {
+      const user_id = document.getElementById("userId").value;
+      const out = document.getElementById("outputView");
+      out.textContent = "Fetching memories for user: " + user_id + "...";
 
-    async function runTC2Step2() {
-      const out = document.getElementById("tc2-output");
-      out.textContent = "Querying /api/users/usr_99/memories...";
       try {
-        const res = await fetch("/api/users/usr_99/memories");
+        const res = await fetch("/api/users/" + encodeURIComponent(user_id) + "/memories");
         const data = await res.json();
-        out.textContent = "Step 2 Retrieved Semantic Memories for usr_99:\n" + JSON.stringify(data, null, 2);
-      } catch (e) {
-        out.textContent = "Error: " + e.message;
-      }
-    }
-
-    async function runTC2Step3() {
-      const out = document.getElementById("tc2-output");
-      out.textContent = "Sending 'Write a quick merge sort routine.' in a NEW session...";
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            query: "Write a quick merge sort routine.",
-            user_id: "usr_99",
-            session_id: "sess_new_tab_" + Date.now()
-          })
-        });
-        const data = await res.json();
-        out.textContent = "Step 3 Result (Notice: Bypasses explanations, returns ONLY code!):\n\n" + data.response;
-      } catch (e) {
-        out.textContent = "Error: " + e.message;
-      }
-    }
-
-    async function runCustomChat() {
-      const out = document.getElementById("custom-output");
-      out.textContent = "Processing...";
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            query: document.getElementById("custom-query").value,
-            user_id: document.getElementById("custom-user").value,
-            session_id: document.getElementById("custom-session").value
-          })
-        });
-        const data = await res.json();
-        document.getElementById("custom-retrieval").textContent = data.telemetry.retrieval_latency_ms;
-        document.getElementById("custom-rerank").textContent = data.telemetry.rerank_latency_ms;
-        document.getElementById("custom-gen").textContent = data.telemetry.generation_latency_ms;
-        document.getElementById("custom-total").textContent = data.telemetry.total_latency_ms;
-        out.textContent = JSON.stringify(data, null, 2);
-      } catch (e) {
-        out.textContent = "Error: " + e.message;
+        out.textContent = "STORED MEMORIES FOR " + user_id + ":\\n\\n" + JSON.stringify(data, null, 2);
+      } catch (err) {
+        out.textContent = "Error: " + err.message;
       }
     }
   </script>
