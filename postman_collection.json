@@ -1,0 +1,140 @@
+{
+  "info": {
+    "_postman_id": "a988d8b9-4a7b-4df2-a9ce-123456789abc",
+    "name": "Advanced RAG Agent with Context Compression & Semantic Memory API",
+    "description": "Postman API Collection for testing Hybrid Retrieval, Cohere ReRank Context Compression, Latency Telemetry, and Mem0 Long-Term Semantic Memory.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Verifies that the FastAPI application and backend services are healthy."
+      },
+      "response": []
+    },
+    {
+      "name": "Test Case 1 - Hybrid Retrieval & Latency Telemetry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Explain how merge sort works and its divide-and-conquer strategy.\",\n  \"user_id\": \"usr_latency_test\",\n  \"session_id\": \"sess_01\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/chat",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        },
+        "description": "Sends a query to /api/chat and asserts the return of execution latency telemetry."
+      },
+      "response": []
+    },
+    {
+      "name": "Test Case 2 Step 1 - Register User Profile Preferences",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Hello! I work in Python and prefer brief, code-only responses.\",\n  \"user_id\": \"usr_99\",\n  \"session_id\": \"sess_init_99\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/chat",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        },
+        "description": "Registers Python preference and code-only style for user usr_99."
+      },
+      "response": []
+    },
+    {
+      "name": "Test Case 2 Step 2 - Retrieve Semantic User Memories",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/users/usr_99/memories",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "usr_99",
+            "memories"
+          ]
+        },
+        "description": "Retrieves the persisted semantic facts for user usr_99."
+      },
+      "response": []
+    },
+    {
+      "name": "Test Case 2 Step 3 - Multi-Session Persona-Adapted Query",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Write a quick merge sort routine.\",\n  \"user_id\": \"usr_99\",\n  \"session_id\": \"sess_new_session\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/chat",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        },
+        "description": "Verifies that the agent adapts to user usr_99's stored persona by returning ONLY the python code block."
+      },
+      "response": []
+    }
+  ]
+}
