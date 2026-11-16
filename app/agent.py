@@ -43,6 +43,19 @@ DEFAULT_KNOWLEDGE_DOCS = [
     ),
     Document(
         page_content=(
+            "Selection Sort is an in-place comparison sorting algorithm with O(n^2) time complexity. "
+            "Unlike divide-and-conquer algorithms such as Merge Sort and Quick Sort, Selection Sort operates by "
+            "repeatedly finding the minimum element from the unsorted segment of the list and placing it at the beginning. "
+            "It maintains two subarrays in a given array: the subarray already sorted from left to right, and the remaining "
+            "unsorted subarray. In each iteration, it performs linear scans to select the smallest item, requiring "
+            "O(n^2) comparisons regardless of the initial order of elements. However, it makes at most O(n) swaps, "
+            "making it useful when memory write operations are expensive. Because it does not recursively partition "
+            "problems into independent subproblems, Selection Sort does not utilize a divide-and-conquer strategy."
+        ),
+        metadata={"title": "Selection Sort Algorithm", "parent_id": "doc_selection_sort_004"}
+    ),
+    Document(
+        page_content=(
             "Advanced Retrieval-Augmented Generation (RAG) integrates dense vector retrieval and sparse lexical search "
             "using Reciprocal Rank Fusion (RRF). Standard RAG architectures split documents into isolated small chunks, "
             "causing context loss. Parent-Document retrieval resolves this by indexing granular child chunks (e.g. 200 chars) "
@@ -228,6 +241,30 @@ class RAGAgent:
             if is_code_only:
                 return code_block
             return f"Here is the quick sort implementation in Python:\n\n{code_block}"
+
+        if "selection sort" in q_lower or "selectionsort" in q_lower:
+            code_block = (
+                "```python\n"
+                "def selection_sort(arr):\n"
+                "    n = len(arr)\n"
+                "    for i in range(n):\n"
+                "        min_idx = i\n"
+                "        for j in range(i + 1, n):\n"
+                "            if arr[j] < arr[min_idx]:\n"
+                "                min_idx = j\n"
+                "        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n"
+                "    return arr\n"
+                "```"
+            )
+            if is_code_only:
+                return code_block
+            return (
+                "**Selection Sort** is an in-place comparison sorting algorithm with O(n^2) time complexity.\n\n"
+                "**Strategy Note:** Unlike Merge Sort or Quick Sort, **Selection Sort does NOT use a divide-and-conquer strategy**. "
+                "Instead, it works incrementally by scanning the unsorted segment of the list, finding the minimum element, "
+                "and swapping it to the beginning.\n\n"
+                f"Python Implementation:\n{code_block}"
+            )
 
         # Conversational / profile initialization queries
         if "hello" in q_lower or "hi" in q_lower or "prefer" in q_lower:
