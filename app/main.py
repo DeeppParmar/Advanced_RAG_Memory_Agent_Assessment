@@ -115,3 +115,19 @@ def get_user_memories_endpoint(user_id: str):
         "memories": memories,
         "count": len(memories)
     }
+
+
+@app.post("/api/run-tests")
+def run_tests_endpoint():
+    """Runs the automated pytest suite and returns verification results."""
+    import subprocess, sys
+    result = subprocess.run(
+        [sys.executable, "-m", "pytest", "-v"],
+        capture_output=True,
+        text=True
+    )
+    return {
+        "exit_code": result.returncode,
+        "success": result.returncode == 0,
+        "output": result.stdout or result.stderr
+    }
