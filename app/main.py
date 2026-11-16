@@ -1,12 +1,14 @@
 """FastAPI application entrypoint exposing RAG Agent and Memory endpoints."""
 from typing import List, Dict, Any, Optional
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app.agent import rag_agent
 from app.memory import memory_manager
 from app.config import settings
+from app.ui import HTML_DASHBOARD
 
 app = FastAPI(
     title="Advanced RAG Agent with Context Compression & Semantic Memory",
@@ -54,8 +56,15 @@ class UserMemoriesResponse(BaseModel):
     count: int
 
 
-@app.get("/")
-def root():
+@app.get("/", response_class=HTMLResponse)
+def root_dashboard():
+    """Serves the interactive visual testing dashboard for real-time validation."""
+    return HTMLResponse(content=HTML_DASHBOARD)
+
+
+@app.get("/api/status")
+def api_status():
+    """Returns JSON API status and docs pointer."""
     return {
         "status": "online",
         "service": "Advanced RAG Agent with Context Compression & Semantic Memory",
